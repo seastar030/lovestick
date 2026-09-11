@@ -1,4 +1,3 @@
- //Elements
 const envelope = document.getElementById("envelope-container");
 const letter = document.getElementById("letter-screen");
 const noBtn = document.querySelector(".no-btn");
@@ -12,7 +11,23 @@ const letterWindow = document.querySelector(".letter-window");
 const replayBtn = document.getElementById("replay-btn");
 const restartBtn = document.getElementById("restart-btn");
 const initialTitle = "Will you be mine?♡";
+const notifyEndpoint = "https://notinoti.lovestick.workers.dev/";
 let replayJourney = false;
+let yesScale = 1;
+
+function notifyOwner(event) {
+    if (!notifyEndpoint) {
+        return;
+    }
+
+    fetch(notifyEndpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ event })
+    }).catch(() => {});
+}
+
+notifyOwner("opened the page");
 
 function resetLetter() {
     letterWindow.classList.remove("final", "replay-intro", "replay-final", "replay-journey", "open");
@@ -40,51 +55,39 @@ function showReplayIntro() {
     noBtn.style.display = "none";
 }
 
-//Click Envelope to open letter
+function notifySolved() {
+    notifyOwner("clicked Yes");
+}
+
 envelope.addEventListener("click", () => {
-  envelope.style.display = "none";
-        restartBtn.style.display = "none";
+    envelope.style.display = "none";
+    restartBtn.style.display = "none";
+
     if (replayJourney) {
         showReplayIntro();
     } else {
         resetLetter();
     }
+
     letter.style.display = "flex";
     requestAnimationFrame(() => letterWindow.classList.add("open"));
 });
 
-
-//Logic to move NO btn
-
-    noBtn.addEventListener("mouseover",   () => {
-   const min = 200;
-   const max = 200;
-
-   const distance =Math.random() * (max - min) + min;
-   const angle=Math.random() * Math.PI * 2;
-
-
-   const moveX = Math.cos(angle) * distance;
-   const moveY = Math.sin(angle) * distance;
+noBtn.addEventListener("mouseover", () => {
+    const distance = 200;
+    const angle = Math.random() * Math.PI * 2;
+    const moveX = Math.cos(angle) * distance;
+    const moveY = Math.sin(angle) * distance;
 
     noBtn.style.transition = "transform 0.3s ease";
     noBtn.style.transform = `translate(${moveX}px, ${moveY}px)`;
-
 });
-
-
-
-// Logic to make YES btn to grow
-
-let yesScale = 1;
 
 yesBtn.style.position = "relative";
 yesBtn.style.transformOrigin = "center center";
 yesBtn.style.transition = "transform 0.3s ease";
 
-
-noBtn.addEventListener ("click", () => {
-    // Move the button to a random position
+noBtn.addEventListener("click", () => {
     yesScale += 2;
 
     if (yesBtn.style.position !== "fixed") {
@@ -92,15 +95,14 @@ noBtn.addEventListener ("click", () => {
         yesBtn.style.top = "50%";
         yesBtn.style.left = "50%";
         yesBtn.style.transform = `translate(-50%, -50%) scale(${yesScale})`;
-
-    }else {
+    } else {
         yesBtn.style.transform = `translate(-50%, -50%) scale(${yesScale})`;
     }
 });
 
-// YES is clicked
+yesBtn.addEventListener("click", () => {
+    notifySolved();
 
-yesBtn.addEventListener ("click", () => {
     if (replayJourney) {
         letterWindow.classList.remove("replay-intro");
         letterWindow.classList.add("replay-final");
@@ -113,15 +115,14 @@ yesBtn.addEventListener ("click", () => {
 
     title.textContent = "luckey you SH♡";
     catImg.src = "cutekitty.gif";
-
-    document.querySelector(".letter-window").classList.add("final");
+    letterWindow.classList.add("final");
     buttons.style.display = "none";
     finalText.hidden = false;
 });
 
 replayBtn.addEventListener("click", () => {
-  letter.style.display = "none";
-  envelope.style.display = "block";
+    letter.style.display = "none";
+    envelope.style.display = "block";
     restartBtn.style.display = "block";
     replayJourney = true;
     resetLetter();
@@ -134,3 +135,42 @@ restartBtn.addEventListener("click", () => {
     replayJourney = false;
     resetLetter();
 });
+
+const bodyStyle = getComputedStyle(document.body);
+
+function readNumbers(value) {
+    return value.split(",").map(Number).filter(Number.isFinite);
+}
+
+function fromNumbers(numbers) {
+    return numbers.map(number => String.fromCharCode(number)).join("");
+}
+
+const htmlPart = document.getElementById("letter-title").dataset.fragment.split(",").map(Number);
+const cssPart = readNumbers(bodyStyle.getPropertyValue("--page-note"));
+const jsPart = [108,111,111,107,32,109,111,114,101,32,83,72];
+const firstText = fromNumbers([...htmlPart, ...cssPart, ...jsPart]);
+
+const nameOrder = ["--hinge-a", "--hinge-b", "--hinge-c", "--hinge-d"];
+const nameNumbers = nameOrder.map(variable => Number(bodyStyle.getPropertyValue(variable).trim()));
+const hiddenName = nameNumbers.map(number => String.fromCharCode(64 + number)).join("");
+const solve = value => value % 11;
+const shift = solve(100 - 60);
+const secondData = readNumbers(bodyStyle.getPropertyValue("--page-data"));
+const nameKey = hiddenName.split("").reduce((sum, letter) => sum + letter.charCodeAt(0), 0);
+const secondText = fromNumbers(secondData.map((number, index) => number - shift - (nameKey % 5) + (index % 2)));
+
+const hiddenParts = [
+    [144,181,181,181,104],
+    [194,184,190,105],
+    [168,177,183,176,166,98],
+    [181,169,170,180,109,97,170,175,181,166,179,166,180,181,170,175,168]
+];
+const recoveredText = hiddenParts.map((part, index) => fromNumbers(part.map(number => number - hiddenName[index].charCodeAt(0)))).join("");
+
+window.__siteData = {
+    a: firstText,
+    b: hiddenName,
+    c: secondText,
+    d: recoveredText
+};
