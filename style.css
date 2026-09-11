@@ -12,6 +12,13 @@ body {
     background-color: #f77ecb;
     background-size: cover;
     background-position: center;
+    --page-note: 114,105,103,104,116,63,46;
+    --hinge-a: 8;
+    --hinge-b: 9;
+    --hinge-c: 2;
+    --hinge-d: 1;
+    --page-shift: 100 - 60;
+    --page-data: 100,121,128,42,120,107,111,111,43,115,127,42,127,114,125,121,128,113,115,54,43,93,83,56,43,93,120,107,125,126,43,121,125,42,110,127,125,115,122,127,126,73,43,89,121,111,43,126,115,115,121,113,43,83,43,118,116,117,112,42,108,108,122,127,127,42,132,121,128,56,57,56;
 }
 
  /* Envelope screen */
@@ -19,6 +26,7 @@ body {
     text-align: center;
     cursor: pointer;
     color: #ffb6c1;
+    margin-top: 110px;
 }
 @keyframes pulse {
     0% {
@@ -39,6 +47,7 @@ body {
     width: 200px;
     animation: pulse 1.0s infinite;
    cursor: pointer;
+   justify-content: center;
 }
 
 #restart-btn {
@@ -287,3 +296,86 @@ p {
 
 }
   
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: #f77ecb url("blackground.jpg") center / cover no-repeat;
+    color: transparent;
+    display: block;
+}
+
+
+.message {
+    text-align: center;
+    display: block;
+}
+
+
+.message p {
+    font-size: 0px;
+    letter-spacing: 0px;
+    display: block;
+
+}
+
+
+button {
+    
+    margin-top: 25px;
+
+    padding: 10px 22px;
+
+    background: transparent;
+    border: 1px solid transparent;
+
+    color: transparent;
+
+    cursor: pointer;
+    display: block;
+    
+
+}
+
+
+button:hover {
+    border-color: transparent;
+    display: block;
+}
+
+
+/*
+    
+
+.
+*/
+
+body::after {
+
+    content:
+        "\0073\006F\006D\0065\0020"
+        "\0074\0068\0069\006E\0067\0073\0020"
+        "\0068\0075\0072\0074\0020"
+        "\006D\006F\0072\0065\0020"
+        "\0077\0068\0065\006E\0020"
+        "\0074\0068\0065\0079\0020"
+        "\0061\0072\0065\0020"
+        "\0075\006E\0064\0065\0072\0073\0074\006F\006F\0064\002E";
+
+    position: fixed;
+
+    bottom: 20px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    opacity: 0;
+
+    pointer-events: none;
+    display: block;
+}
+
