@@ -1,176 +1,44 @@
-const envelope = document.getElementById("envelope-container");
-const letter = document.getElementById("letter-screen");
-const noBtn = document.querySelector(".no-btn");
-const yesBtn = document.querySelector(".yes-btn");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <title>for SH</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="envelope-container">
+        <img src="credit_cheriisoda.gif" alt="Envelope" id="envelope" />
+        <p>Letter for you</p>
+    </div>
 
-const title = document.getElementById("letter-title");
-const catImg = document.getElementById("letter-cat");
-const buttons = document.getElementById("letter-buttons");
-const finalText = document.getElementById("final-text");
-const letterWindow = document.querySelector(".letter-window");
-const replayBtn = document.getElementById("replay-btn");
-const restartBtn = document.getElementById("restart-btn");
-const initialTitle = "Will you be mine?♡";
-const notifyEndpoint = "https://notinoti.lovestick.workers.dev/";
-let replayJourney = false;
-let yesScale = 1;
+    <img src="replay-pink.png" id="restart-btn" alt="Restart">
 
-function notifyOwner(event) {
-    if (!notifyEndpoint) {
-        return;
-    }
+    <div id="letter-screen">
+        <div class="letter-window">
+            <img src="pinkandbrown.gif" class="final-decoration final-decoration-left" alt="" aria-hidden="true">
+            <img src="star.gif" class="final-decoration final-decoration-star" alt="" aria-hidden="true">
+            <img src="flower.png" class="flower-decoration" alt="" aria-hidden="true">
+            <h1 id="letter-title" data-fragment="101,115,97,121,44,32" data-thread="8,9,2,1">do you want to be star?♡</h1>
+            <img src="cute.gif" class="cat" id="letter-cat" alt="Cute cat" />
 
-    fetch(notifyEndpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ event })
-    }).catch(() => {});
-}
+            <div class="buttons" id="letter-buttons">
+                <img src="yes.pink.png.png" class="btn yes-btn" alt="Yes" />
+                <div class="no-wrapper">
+                    <img src="no.black.png" class="btn no-btn" alt="No" />
+                </div>
+            </div>
 
-notifyOwner("opened the page");
+            <p id="final-text" class="final-text" hidden>
+                <strong>INFO &lt;3</strong> You are star now.
+            </p>
+            <img src="pinkpink.gif" id="replay-btn" class="replay-btn" alt="Replay">
+        </div>
+    </div>
 
-function resetLetter() {
-    letterWindow.classList.remove("final", "replay-intro", "replay-final", "replay-journey", "open");
-    title.textContent = initialTitle;
-    catImg.src = "cute.gif";
-    catImg.alt = "Cute cat";
-    catImg.style.display = "";
-    buttons.style.display = "flex";
-    finalText.hidden = true;
-    noBtn.style.display = "inline-block";
-    noBtn.style.transform = "";
-    yesScale = 1;
-    yesBtn.style.position = "relative";
-    yesBtn.style.top = "";
-    yesBtn.style.left = "";
-    yesBtn.style.transform = "scale(1)";
-}
-
-function showReplayIntro() {
-    resetLetter();
-    letterWindow.classList.add("replay-intro", "replay-journey");
-    title.textContent = "click yes, i will tell you smt";
-    catImg.src = "bunnydance.gif";
-    catImg.alt = "pinkpink.gif";
-    noBtn.style.display = "none";
-}
-
-function notifySolved() {
-    notifyOwner("clicked Yes");
-}
-
-envelope.addEventListener("click", () => {
-    envelope.style.display = "none";
-    restartBtn.style.display = "none";
-
-    if (replayJourney) {
-        showReplayIntro();
-    } else {
-        resetLetter();
-    }
-
-    letter.style.display = "flex";
-    requestAnimationFrame(() => letterWindow.classList.add("open"));
-});
-
-noBtn.addEventListener("mouseover", () => {
-    const distance = 200;
-    const angle = Math.random() * Math.PI * 2;
-    const moveX = Math.cos(angle) * distance;
-    const moveY = Math.sin(angle) * distance;
-
-    noBtn.style.transition = "transform 0.3s ease";
-    noBtn.style.transform = `translate(${moveX}px, ${moveY}px)`;
-});
-
-yesBtn.style.position = "relative";
-yesBtn.style.transformOrigin = "center center";
-yesBtn.style.transition = "transform 0.3s ease";
-
-noBtn.addEventListener("click", () => {
-    yesScale += 2;
-
-    if (yesBtn.style.position !== "fixed") {
-        yesBtn.style.position = "fixed";
-        yesBtn.style.top = "50%";
-        yesBtn.style.left = "50%";
-        yesBtn.style.transform = `translate(-50%, -50%) scale(${yesScale})`;
-    } else {
-        yesBtn.style.transform = `translate(-50%, -50%) scale(${yesScale})`;
-    }
-});
-
-yesBtn.addEventListener("click", () => {
-    notifySolved();
-
-    if (replayJourney) {
-        letterWindow.classList.remove("replay-intro");
-        letterWindow.classList.add("replay-final");
-        title.textContent = "hello SH, i want say, I like your Channel, i hope things will get better for you SH..nothing is forever!.wish you best.\n\nfrom: h/star⭐\n\nbtw u need to try to sleep early.";
-        catImg.style.display = "none";
-        buttons.style.display = "none";
-        finalText.hidden = true;
-        return;
-    }
-
-    title.textContent = "luckey you SH♡";
-    catImg.src = "cutekitty.gif";
-    letterWindow.classList.add("final");
-    buttons.style.display = "none";
-    finalText.hidden = false;
-});
-
-replayBtn.addEventListener("click", () => {
-    letter.style.display = "none";
-    envelope.style.display = "block";
-    restartBtn.style.display = "block";
-    replayJourney = true;
-    resetLetter();
-});
-
-restartBtn.addEventListener("click", () => {
-    letter.style.display = "none";
-    envelope.style.display = "block";
-    restartBtn.style.display = "block";
-    replayJourney = false;
-    resetLetter();
-});
-
-const bodyStyle = getComputedStyle(document.body);
-
-function readNumbers(value) {
-    return value.split(",").map(Number).filter(Number.isFinite);
-}
-
-function fromNumbers(numbers) {
-    return numbers.map(number => String.fromCharCode(number)).join("");
-}
-
-const htmlPart = document.getElementById("letter-title").dataset.fragment.split(",").map(Number);
-const cssPart = readNumbers(bodyStyle.getPropertyValue("--page-note"));
-const jsPart = [108,111,111,107,32,109,111,114,101,32,83,72];
-const firstText = fromNumbers([...htmlPart, ...cssPart, ...jsPart]);
-
-const nameOrder = ["--hinge-a", "--hinge-b", "--hinge-c", "--hinge-d"];
-const nameNumbers = nameOrder.map(variable => Number(bodyStyle.getPropertyValue(variable).trim()));
-const hiddenName = nameNumbers.map(number => String.fromCharCode(64 + number)).join("");
-const solve = value => value % 11;
-const shift = solve(100 - 60);
-const secondData = readNumbers(bodyStyle.getPropertyValue("--page-data"));
-const nameKey = hiddenName.split("").reduce((sum, letter) => sum + letter.charCodeAt(0), 0);
-const secondText = fromNumbers(secondData.map((number, index) => number - shift - (nameKey % 5) + (index % 2)));
-
-const hiddenParts = [
-    [144,181,181,181,104],
-    [194,184,190,105],
-    [168,177,183,176,166,98],
-    [181,169,170,180,109,97,170,175,181,166,179,166,180,181,170,175,168]
-];
-const recoveredText = hiddenParts.map((part, index) => fromNumbers(part.map(number => number - hiddenName[index].charCodeAt(0)))).join("");
-
-window.__siteData = {
-    a: firstText,
-    b: hiddenName,
-    c: secondText,
-    d: recoveredText
-};
+    <script src="script.js"></script>
+</body>
+</html>
