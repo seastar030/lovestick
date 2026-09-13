@@ -10,7 +10,7 @@ const finalText = document.getElementById("final-text");
 const letterWindow = document.querySelector(".letter-window");
 const replayBtn = document.getElementById("replay-btn");
 const restartBtn = document.getElementById("restart-btn");
-const initialTitle = "Will you be mine?♡";
+const initialTitle = "do you want to be the kitty friend?♡";
 let replayJourney = false;
 let yesScale = 1;
 
