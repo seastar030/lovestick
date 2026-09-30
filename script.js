@@ -85,7 +85,7 @@ yesBtn.addEventListener("click", () => {
     if (replayJourney) {
         letterWindow.classList.remove("replay-intro");
         letterWindow.classList.add("replay-final");
-        title.textContent = "hello SH, i want say, I like your Channel, i hope things will get better for you SH..nothing is forever!.wish you best.\n\nfrom: h/star⭐\n\nbtw u need to try to sleep early.";
+        title.textContent = "hello imann, i want say, I like your frindshipe, i hope things will get better for you..nothing is forever!.wish you best.\n\nfrom: h/star⭐\n\nbtw u need to try to sleep early.";
         catImg.style.display = "none";
         buttons.style.display = "none";
         finalText.hidden = true;
